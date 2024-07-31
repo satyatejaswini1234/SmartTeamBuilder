@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Compatibility Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        .spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #007bff;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #employeesListContent li {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #employeesListContent h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex;flex-direction: row;gap: 57%;">
+        <h1>Smart Team Builder</h1>
+        <img src="static\tata_img-removebg-preview.png" style="height: 100px;">
+        </div>
+        <div id="projectForm">
+            <h2>Create New Project</h2>
+            <form id="newProjectForm">
+                <input type="text" id="projectName" placeholder="Project Name" required>
+                <textarea id="requirements" placeholder="Project Requirements" required></textarea>
+                <input type="date" id="deadline" required>
+                <button class="btn-primary" type="submit" id="submitButton">Analyze and Assign Team</button>
+            </form>
+        </div>
+        
+        <div id="spinner" class="spinner"></div>
+        
+        <div  id="aiSuggestion" class="hidden">
+            <h2>AI Suggestion</h2>
+            <div id="suggestionContent"></div>
+        </div>
+        
+        <div id="teamsList">
+            <h2>Teams</h2>
+            <ul id="teamsListContent"></ul>
+            <button class="btn-primary" onclick="window.location.href='{{ url_for('add_team') }}'">Add New Team</button>
+        </div>
+        
+        <div id="employeesList">
+            <h2>Employees</h2>
+            <form class="search-form" id="employeeSearch">
+                <input type="text" id="employeeSearchInput" placeholder="Search employees..." list="employeeSuggestions">
+                <datalist id="employeeSuggestions"></datalist>
+                <button class="btn-primary" type="submit">Search</button>
+            </form>
+            <ul class="employee-card" id="employeesListContent"></ul>
+            <button class="btn-primary" onclick="window.location.href='{{ url_for('add_employee') }}'">Add New Employee</button>
+        </div>
+        
+        <div id="excelUpload">
+            <h2></h2>
+            <form id="excelUploadForm" enctype="multipart/form-data">
+                <input type="file" id="excelFile" accept=".xlsx, .xls" required>
+                <button class="btn-primary" type="submit" id="uploadButton">Upload Employee Data from Excel</button>
+                
+            </form>
+            <div id="uploadStatus"></div>
+            <br><br>
+        </div>
+    </div>
+    <div id="employeeDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmployeeDetails()">&times;</span>
+            <div id="employeeDetails"></div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
